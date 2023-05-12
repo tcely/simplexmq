@@ -22,7 +22,7 @@ fi
 # backup store log
 _file="${logd}/smp-server-store.log"
 if [ -f "${_file}" ]; then
-  _backup_extension="$(date --universal --iso-8601=seconds)"
+  _backup_extension="$(date --universal '+%FT%T%:z')"
   cp -v -p "${_file}" "${_file}.${_backup_extension:-date-failed}"
   unset -v _backup_extension
 fi
