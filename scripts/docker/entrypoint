@@ -11,7 +11,7 @@ if [ ! -f "$confd/smp-server.ini" ]; then
     *) set -- --ip "$addr" ;;
   esac
 
-  case $pass in
+  case "$pass" in
     '') set -- "$@" --no-password ;;
     *) set -- "$@" --password "$pass" ;;
   esac
