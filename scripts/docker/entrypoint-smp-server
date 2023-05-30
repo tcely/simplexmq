@@ -13,14 +13,13 @@ if [ ! -f "${confd}/smp-server.ini" ]; then
   # If not, determine ip or domain
   _arg1="$(print_arg_from_env_addr)" || exit 1
   set -- "${_arg1}" "${ADDR}"
+  unset -v _arg1
 
   # Optionally, set password
-  if _arg1="$(print_arg_from_env_pass)"; then
-    set -- "$@" "${_arg1}" "${PASS}"
-  else
-    set -- "$@" "${_arg1}"
-  fi
-  unset -v _arg1
+  case "${PASS}" in
+    '') set -- "$@" --no-password ;;
+    *) set -- "$@" --password "${PASS}" ;;
+  esac
 
   # And init certificates and configs
   smp-server init -y -l "$@"
