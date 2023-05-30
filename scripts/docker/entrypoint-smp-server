@@ -11,10 +11,16 @@ unset -v _shd
 # Check if server has been initialized
 if [ ! -f "${confd}/smp-server.ini" ]; then
   # If not, determine ip or domain
-  set_args_from_env_addr || exit 1
+  _arg1="$(print_arg_from_env_addr)" || exit 1
+  set -- "${_arg1}" "${ADDR}"
 
   # Optionally, set password
-  append_args_from_env_pass
+  if _arg1="$(print_arg_from_env_pass)"; then
+    set -- "$@" "${_arg1}" "${PASS}"
+  else
+    set -- "$@" "${_arg1}"
+  fi
+  unset -v _arg1
 
   # And init certificates and configs
   smp-server init -y -l "$@"
