@@ -11,10 +11,14 @@ unset -v _shd
 # Check if server has been initialized
 if [ ! -f "${confd}/file-server.ini" ]; then
   # If not, determine ip or domain
-  set_args_from_env_addr || exit 1
+  _arg1="$(print_arg_from_env_addr)" || exit 1
+  set -- "${_arg1}" "${ADDR}"
 
   # Set quota
-  append_args_from_env_quota || exit 1
+  _arg1="$(print_arg_from_env_quota)" || exit 1
+  set -- "$@" "${_arg1}" "${QUOTA}"
+  
+  unset -v _arg1
 
   # Init the certificates and configs
   xftp-server init -l -p /srv/xftp "$@"
